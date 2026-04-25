@@ -1,71 +1,136 @@
 # Darija N-gram Language Model
 
-This project implements a probabilistic N-gram language model for Moroccan Darija using a corpus collected from multiple online sources.
+A probabilistic trigram language model implemented from scratch on a multi-source Moroccan Darija corpus.
 
-## Project Overview
+This project focuses on modeling natural language using statistical methods without relying on external NLP libraries.
 
-The goal of this project is to build and evaluate a language model that can:
+---
 
-- Learn patterns from Darija text
-- Estimate sentence probabilities
-- Generate new sentences
-- Compare different N-gram models
+## Features
+
+- Unigram, Bigram, and Trigram models
+- Laplace (Add-1) smoothing
+- Backoff strategy (Trigram → Bigram → Unigram)
+- Sentence log-probability computation
+- Perplexity evaluation
+- Random sentence generation
+- N-gram frequency visualization
+
+---
+
+## Project Structure
+assignment3/
+├── data/ # (not included in repo)
+├── Darija_notebook.ipynb # main notebook
+├── ngram_model_results.json # results and metrics
+├── ngram_frequency_plot.png # visualization
+└── README.md
+
+---
+
+## Dataset
+
+The dataset is not included due to size limitations.
+
+It contains Darija text collected from:
+
+| Source       | Description                  |
+|--------------|-----------------------------|
+| Wikipedia    | Darija articles             |
+| News sites   | Moroccan news content       |
+| Twitter      | Informal user text          |
+| Stories      | Narrative content           |
+| YouTube      | Comments and discussions    |
+
+To run the project, place your dataset inside a `data/` folder in the root directory.
+
+---
 
 ## Methodology
 
-### 1. Data Processing
-- The dataset contains Darija text from various sources
-- Text is cleaned by removing URLs, special characters, and noise
-- Tokenization is applied to split text into words
+### 1. Preprocessing
+- Lowercasing text
+- Removing URLs and special characters
+- Tokenization into words
 
-### 2. Language Models
-We implemented:
-- **Unigram Model** (n = 1)
-- **Bigram Model** (n = 2)
-- **Trigram Model** (n = 3)
+---
 
-### 3. Smoothing & Backoff
-- Laplace (Add-1) smoothing is used to handle unseen words
-- Backoff strategy:
-  - Trigram → Bigram → Unigram
+### 2. N-gram Modeling
 
-### 4. Evaluation
-The model is evaluated using:
-- Log probability of sentences
-- Perplexity on test data
+We construct:
+
+- **Unigram model:** P(w)
+- **Bigram model:** P(w₂ | w₁)
+- **Trigram model:** P(w₃ | w₁, w₂)
+
+---
+
+### 3. Laplace Smoothing
+
+To avoid zero probabilities:
+P(w) = (C(w) + 1) / (N + |V|)
+P(w₂|w₁) = (C(w₁,w₂) + 1) / (C(w₁) + |V|)
+P(w₃|w₁,w₂) = (C(w₁,w₂,w₃) + 1) / (C(w₁,w₂) + |V|)
+
+---
+
+### 4. Backoff Strategy
+
+if trigram exists → use trigram probability
+elif bigram exists → λ × bigram probability
+else → λ² × unigram probability
+
+Where λ = 0.4
+
+---
+
+### 5. Evaluation
+
+#### Log Probability
+Measures how likely a sentence is under the model.
+
+#### Perplexity
+PP = exp( -1/N * Σ log P(wᵢ | context) )
+
+Lower perplexity indicates better performance.
+
+---
 
 ## Results
 
-- The trigram model performs better than unigram and bigram models
-- Perplexity remains high due to:
-  - Noisy and informal nature of Darija text
-  - Data sparsity
-- The model successfully captures common word patterns
+- Trigram model captures more context than lower-order models
+- Perplexity is relatively high due to:
+  - Noisy real-world data
+  - Informal Darija spelling variations
+  - Large vocabulary
+
+- The model still learns meaningful patterns and generates readable sequences
+
+---
 
 ## Visualization
 
-The project includes a visualization of:
-- Top 20 most frequent unigrams, bigrams, and trigrams
+The project includes a plot showing:
+
+- Top 20 Unigrams
+- Top 20 Bigrams
+- Top 20 Trigrams
 
 Saved as:
-- `ngram_frequency_plot.png`
 
-## Example Output
+ngram_frequency_plot.png
 
-Generated sentences from the model:
+---
+
+## Example Generated Sentences
 
 - salam ana mzyan fin ghadi daba  
 - wach nta katdir chi haja daba  
+- ana ghadi nshouf chi film lyoum  
 
-## Files in Repository
-
-- `Darija_notebook.ipynb` → Main notebook
-- `ngram_model_results.json` → Model evaluation results
-- `ngram_frequency_plot.png` → Frequency visualization
-- `README.md` → Project description
+---
 
 ## Conclusion
 
 The trigram model captures more contextual information compared to lower-order models.  
 However, performance is limited due to the informal and inconsistent nature of Darija text.
-
