@@ -1,0 +1,15 @@
+{
+    "model": "Trigram n-gram language model",
+    "smoothing": "Laplace smoothing",
+    "backoff": "Trigram to bigram to unigram",
+    "lambda": 0.4,
+    "max_characters_used": 5000000,
+    "total_tokens": 807092,
+    "training_tokens": 726382,
+    "testing_tokens": 80710,
+    "vocabulary_size": 81887,
+    "unique_unigrams": 81887,
+    "unique_bigrams": 270596,
+    "unique_trigrams": 344133,
+    "test_perplexity": 70791.67632296223
+}
